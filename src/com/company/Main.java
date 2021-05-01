@@ -1,68 +1,53 @@
 package com.company;
-import com.company.business.SalesCompany;
+
+import com.company.business.*;
 
 import java.util.Scanner;
+
 public class Main {
 
     public static void main(String[] args) {
-    Scanner theScanner= new Scanner(System.in);
+        Scanner theScanner = new Scanner(System.in);
 
-    SalesCompany grupoNucleo= new SalesCompany();
+        double promedy=0;
 
-    String nameOfCustomer;
+        boolean confirmation;
 
-    System.out.println("Ingrese el nombre:");
+        SalesCompany grupoNucleo = new SalesCompany();
 
-    nameOfCustomer=theScanner.next();
+        Company firstClient= new Company("Jorge","heguilor 2818","2234551674");
 
-    System.out.println("Ingrese el numero de telefono:");
+        Product firstProducct=new Product(22000,"GTX 1660",10);
+        Product secondProducct=new Product(30000,"RTX 2080",20);
 
-    String phoneNumber = theScanner.next();
+        confirmation=grupoNucleo.agreeClient(firstClient);
+        confirmationOfAgree(confirmation);
+        confirmation=grupoNucleo.agreeProduct(firstProducct);
+        confirmationOfAgree(confirmation);
+        confirmation=grupoNucleo.agreeProduct(secondProducct);
+        confirmationOfAgree(confirmation);
+        confirmation=grupoNucleo.agreeOrder("2234551674","GTX 1660",5);
+        confirmationOfAgree(confirmation);
+        confirmation=grupoNucleo.agreeOrder("2234551674","RTX 2080",5);
+        confirmationOfAgree(confirmation);
+        confirmation=grupoNucleo.agreeOrder("2234551674","GTX 1660",5);
+        confirmationOfAgree(confirmation);
+        confirmation=grupoNucleo.agreeOrder("2234551674","RTX 2080",5);
+        confirmationOfAgree(confirmation);
+        confirmation=grupoNucleo.agreeOrder("2234551674","GTX 1660",5);
+        confirmationOfAgree(confirmation);
+        promedy=grupoNucleo.calculatePromedy();
+        System.out.println("Promedy:"+promedy);
 
-    System.out.println("Ingrese la direccion:");
-
-    String direction= theScanner.next();
-
-
-    grupoNucleo.createCustomerAndAdd(nameOfCustomer,phoneNumber,direction);
-
-    System.out.println("Ingrese el nombre:");
-
-    String nameOfCompany= theScanner.next();
-
-    System.out.println("Ingrese el numero de telefono:");
-
-    String phoneNumberOfCompany = theScanner.next();
-
-    System.out.println("Ingrese la direccion:");
-
-    String directionOfComapany= theScanner.next();
-
-    grupoNucleo.createCompanies(nameOfCompany,directionOfComapany,phoneNumberOfCompany);
-
-    System.out.println("Ingrese el nombre:");
-
-    String nameOfProduct= theScanner.next();
-
-    System.out.println("Ingrese el precio:");
-
-    double priceOfProduct= theScanner.nextFloat();
-
-    System.out.println("Ingrese el stock del producto");
-
-    int stockOfProduct= theScanner.nextInt();
-
-    grupoNucleo.createProducctAndAdd(priceOfProduct,nameOfProduct,stockOfProduct);
-
-    System.out.println("Ingrese el nombre del producto");
-
-    String nameOfProductToSell= theScanner.next();
-
-    System.out.println("Ingrese el nombre del cliente:");
-
-    String clientToBill= theScanner.next();
-
-    grupoNucleo.generateOrder(nameOfProductToSell,clientToBill);
     }
-
+   static void confirmationOfAgree(boolean confirmation)
+    {
+        if (confirmation==true)
+            System.out.println("El pedido fue realizado exitosamente");
+        else
+            System.out.println("El pedido no fue procesado correctamente , intente de nuevo");
+    }
 }
+
+
+

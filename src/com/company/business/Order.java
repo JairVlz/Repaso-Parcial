@@ -1,22 +1,17 @@
 package com.company.business;
 
-public class Order {
-    private Product productDeliver;
-    private double  totalCost;
-    private Object  informationClient;
+import java.util.ArrayList;
+import java.util.List;
 
-    public Order(Product productDeliver, double totalCost, Object informationClient) {
-        this.productDeliver = productDeliver;
+public class Order {
+    private List <Product> productsToDelivers= new ArrayList<>();
+    private double  totalCost;
+    private Client  informationClient;
+
+    public Order(double totalCost, Client informationClient) {
+
         this.totalCost = totalCost;
         this.informationClient = informationClient;
-    }
-
-    public Product getProductDeliver() {
-        return productDeliver;
-    }
-
-    public void setProductDeliver(Product productDeliver) {
-        this.productDeliver = productDeliver;
     }
 
     public double getTotalCost() {
@@ -31,7 +26,11 @@ public class Order {
         return informationClient;
     }
 
-    public void setInformationClient(Object informationClient) {
+    public void setInformationClient(Client informationClient) {
         this.informationClient = informationClient;
+    }
+    public void addProductToList(Product productToAgree)
+    {
+        productsToDelivers.add(productToAgree);
     }
 }

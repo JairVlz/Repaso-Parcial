@@ -1,113 +1,103 @@
 package com.company.business;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
 import javafx.beans.binding.ObjectExpression;
 
+import javax.sound.midi.SysexMessage;
 import java.awt.print.PrinterAbortException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SalesCompany {
-    private List <PrivateCustomer> listPrivateCustomers= new ArrayList<>();
-    private List <Companies> listCompanies= new ArrayList<>();
-    private List <Order> listOrders= new ArrayList<>();
-    private List <Product> listProducts= new ArrayList<>();
+    private final Set<Client> listCustomers = new HashSet<>();
+    private final List<Order> listOrders = new ArrayList<>();
+    private final List<Product> listProducts = new ArrayList<>();
 
 
-
-    public void createCustomerAndAdd(String name, String phoneNumber , String direction)
-    {
-        PrivateCustomer customerToAdd=new PrivateCustomer(name, direction, phoneNumber);
-
-        listPrivateCustomers.add(customerToAdd);
+    public SalesCompany() {
     }
-    public void createProducctAndAdd(double price , String name , int stock)
-    {
-        Product productToAdd=new Product(price, name, stock);
 
-        listProducts.add(productToAdd);
-    }
-    public void createCompanies (String name , String direction,String phoneNumber)
-    {
-        Companies companyToAdd=new Companies (name,direction,phoneNumber);
-
-        listCompanies.add(companyToAdd);
-
+    public boolean agreeClient(Client clientToAgree) {
+        return listCustomers.add(clientToAgree);
 
     }
 
-    public boolean confirmStock(String nameOfProduct)
-    {
-        for (Product aux:listProducts)
-        {
-            if (aux.getName()==nameOfProduct&&aux.getStock()>0)
-                return true;
+    public boolean agreeProduct(Product productToAgree) {
+        return listProducts.add(productToAgree);
+    }
+
+    public double calculateShipping(int distance) {
+        return distance * 40;
+    }
+
+    public Client findClient(String phoneNumberOfClient) {
+        for (Client aux : listCustomers) {
+            if (aux.getPhoneNumber()==phoneNumberOfClient)
+                return aux;
         }
+        return null;
+    }
 
+    public Product findProduct(String nameOfProduct) {
+        for (Product aux : listProducts) {
+            if (aux.getName().compareToIgnoreCase(nameOfProduct)==0)
+                return aux;
+        }
+        return null;
+    }
+
+    public boolean agreeOrder(String phoneNumberOfCustomer, String nameOfProduct, int distance) {
+        double priceFinal = 0;
+        Client clientToOrder = findClient(phoneNumberOfCustomer);
+        Product productToOrder = findProduct(nameOfProduct);
+        int posOfProduct=listProducts.indexOf(productToOrder);
+
+
+
+        if (clientToOrder != null && productToOrder != null) {
+
+            if (productToOrder.getStock()>0){
+                listProducts.get(posOfProduct).setStock(listProducts.get(posOfProduct).getStock()-1);
+            if (clientToOrder instanceof Company) {
+
+                priceFinal = calculateShipping(distance) + productToOrder.getPrice();
+
+                priceFinal = priceFinal * ((Company) clientToOrder).getDiscount() / 100;
+
+                Order orderToAgree = new Order(priceFinal, clientToOrder);
+
+                orderToAgree.addProductToList(productToOrder);
+
+                return listOrders.add(orderToAgree);
+
+            } else if (clientToOrder instanceof Particular) {
+
+                priceFinal = calculateShipping(distance) + productToOrder.getPrice();
+
+                Order orderToAgree = new Order(priceFinal, clientToOrder);
+
+                orderToAgree.addProductToList(productToOrder);
+
+                return listOrders.add(orderToAgree);
+
+            }
+
+            }
+        }
+        listProducts.get(posOfProduct).setStock(listProducts.get(posOfProduct).getStock()+1);
         return false;
     }
-    public int findProduct(String name)
+    public double calculatePromedy()
     {
-        for(Product aux:listProducts)
+        int accountantSales=0;
+        double promedy=0;
+        for (Order aux:listOrders)
         {
-            if (aux.getName()==name&&aux.getStock()>0)
-                return listProducts.indexOf(aux);
+            promedy=promedy+aux.getTotalCost();
+            accountantSales++;
         }
-        return -1;
+        return promedy/accountantSales;
     }
-    public double calculateDistance(double price){
-        return price+300;
-    }
-
-    public int findClientPrivae(String nameOfClient)
-    {
-
-
-        for (PrivateCustomer auxOfClient:listPrivateCustomers)
-        {
-            if (auxOfClient.getName()==nameOfClient)
-            {
-                return listPrivateCustomers.indexOf(auxOfClient);
-            }
-        }
-        return -1;
-    }
-    public int findClientEmpresary(String nameOfClient)
-    {
-        for (Companies aux:listCompanies)
-        {
-            if (aux.getNameFantasy()==nameOfClient)
-            {
-
-                return listProducts.indexOf(aux);
-            }
-        }
-        return -1;
-    }
-
-    public void generateOrder(String nameOfProduct,String nameOfClient){
-        int posOfProduct;
-        double totalPrice=500;
-        int posInList;
-        posInList=findClientPrivae(nameOfClient);
-        if (posInList>=0)
-        {
-
-        posOfProduct=findProduct(nameOfProduct);
-        totalPrice=calculateDistance(listProducts.get(posOfProduct).getPrice());
-        if (posOfProduct>-1)
-        {
-            listOrders.add(new Order(listProducts.get(posOfProduct),totalPrice,listPrivateCustomers.get(posInList)));
-        }
-        }else if(findClientEmpresary(nameOfClient)>=0)
-        {
-
-            posOfProduct=findProduct(nameOfProduct);
-            totalPrice=(calculateDistance(listProducts.get(posOfProduct).getPrice()))*15/100;
-            if (posOfProduct>-1)
-            {
-                listOrders.add(new Order(listProducts.get(posOfProduct),totalPrice, listCompanies.get(posInList)));
-            }
-        }
-    }
-
 }
