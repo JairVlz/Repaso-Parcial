@@ -2,18 +2,18 @@ package com.company.business;
 
 import java.util.Objects;
 
-public class Client {
+public abstract class Client {
     private String name;
     private String direction;
     private String phoneNumber;
+    private String cuit;
 
-    public Client() {
-    }
 
-    public Client(String name, String direction, String phoneNumber) {
+    public Client(String name, String direction, String phoneNumber,String cuit) {
         this.name = name;
         this.direction = direction;
         this.phoneNumber = phoneNumber;
+        this.cuit=cuit;
     }
 
     public String getName() {
@@ -40,21 +40,22 @@ public class Client {
         this.phoneNumber = phoneNumber;
     }
 
-    @Override
-    public String toString() {
-        return "Client{" +
-                "name='" + name + '\'' +
-                ", direction='" + direction + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
+    public String getCuit() {
+        return cuit;
     }
+
+    public void setCuit(String cuit) {
+        this.cuit = cuit;
+    }
+
+    public abstract void mostrarEnDetalle ();
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        if (phoneNumber.equals(client.phoneNumber))
+        if (cuit.equals(client.cuit))
             return true;
 
         return false;

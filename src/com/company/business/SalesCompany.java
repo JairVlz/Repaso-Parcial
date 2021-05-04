@@ -32,9 +32,9 @@ public class SalesCompany {
         return distance * 40;
     }
 
-    public Client findClient(String phoneNumberOfClient) {
+    public Client findClient(String cuitOfClient) {
         for (Client aux : listCustomers) {
-            if (aux.getPhoneNumber()==phoneNumberOfClient)
+            if (aux.getCuit()==cuitOfClient)
                 return aux;
         }
         return null;
@@ -48,9 +48,9 @@ public class SalesCompany {
         return null;
     }
 
-    public boolean agreeOrder(String phoneNumberOfCustomer, String nameOfProduct, int distance) {
+    public boolean agreeOrder(String cuitCustomer, String nameOfProduct, int distance) {
         double priceFinal = 0;
-        Client clientToOrder = findClient(phoneNumberOfCustomer);
+        Client clientToOrder = findClient(cuitCustomer);
         Product productToOrder = findProduct(nameOfProduct);
         int posOfProduct=listProducts.indexOf(productToOrder);
 

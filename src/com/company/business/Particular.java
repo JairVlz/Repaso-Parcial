@@ -2,10 +2,15 @@ package com.company.business;
 
 public class Particular extends Client {
 
-    public Particular(){}
 
-    public Particular (String name, String direction,String phoneNumber)
+    public Particular (String name, String direction,String phoneNumber,String cuit)
     {
-        super(name, direction, phoneNumber);
+        super(name, direction, phoneNumber,cuit);
+
+    }
+
+    @Override
+    public void mostrarEnDetalle() {
+        System.out.println("Cliente:");
     }
 }
